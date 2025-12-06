@@ -68,10 +68,54 @@ const getAllUsers = async () => {
     return result;
 }
 
+// Get User by ID Service
+const getUserById = async (userId: number) => {
+    const result = await pool.query(`
+        SELECT id, name, email, phone, role, created_at FROM users WHERE id = $1;
+    `, [userId]);
+
+    const user = result.rows[0];
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    return user;
+}
+// Update User by ID Service
+const updateUserById = async (userId: number, userData: Record<string, any>) => {
+    // console.log("User provided data: ",userData)
+    if (!userData) {
+        throw new Error('No data provided for update');
+    }
+
+    const result = await pool.query(`
+        SELECT * FROM users WHERE id = $1;
+    `, [userId]);
+    const user = result.rows[0];
+    if (!user) {
+        throw new Error('User not found');
+    }
+
+    const updatedUser = {
+        ...user,
+        ...userData
+    };
+
+    // Save updated user to database
+    const Updatedresult = await pool.query(`
+        UPDATE users
+        SET name = $1, email = $2, phone = $3, role = $4
+        WHERE id = $5;
+    `, [updatedUser.name, updatedUser.email, updatedUser.phone, updatedUser.role, userId]);
+
+    return {Updatedresult,updatedUser};
+}
 
 export const userService = {
     createUser,
     loginUser,
-    getAllUsers
+    getAllUsers,
+    getUserById,
+    updateUserById
 
 };

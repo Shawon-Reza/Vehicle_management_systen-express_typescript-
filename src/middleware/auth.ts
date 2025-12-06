@@ -34,7 +34,8 @@ export const auth = (...role: string[]) => {
             console.log(err)
             return res.status(401).json({
                 success: false,
-                message: 'Unauthorized: Invalid token'
+                message: 'Unauthorized: Invalid token',
+                error: err
             });
         }
 
