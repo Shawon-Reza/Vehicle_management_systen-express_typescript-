@@ -81,9 +81,37 @@ const getAllVehicles = async (req: Request, res: Response) => {
         })
     }
 }
+// Delete  vehicles by ID 
+const deleteVehicleByID = async (req: Request, res: Response) => {
+
+    try {
+        const result = await vehicleService.deleteVehicleByID(req.params.id)
+        console.log("Receieved Controller :", result)
+
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: "No data found",
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Deleted Vehicle successfully",
+            data: result
+
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Internal serval error",
+            error: error
+        })
+    }
+}
 
 export const vehicleController = {
     createVehicle,
     getVehicleByID,
-    getAllVehicles
+    getAllVehicles,
+    deleteVehicleByID
 }

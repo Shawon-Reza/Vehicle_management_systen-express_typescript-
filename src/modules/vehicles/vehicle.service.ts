@@ -42,9 +42,18 @@ const getAllVehicles = async () => {
     console.log(result.rows)
     return result.rows
 }
+// Delete vehicles by ID
+const deleteVehicleByID = async (id: any) => {
+    const result = await pool.query(`
+    DELETE FROM vehicles WHERE id=$1 RETURNING *
+    `, [id])
+
+    return result.rows[0]
+}
 
 export const vehicleService = {
     createVehicle,
     getVehicleByID,
-    getAllVehicles
+    getAllVehicles,
+    deleteVehicleByID
 }
