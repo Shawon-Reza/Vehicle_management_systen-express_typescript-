@@ -42,7 +42,7 @@ export const initDb = async () => {
             type VARCHAR (20) NOT NULL CHECK (LOWER(type) IN ('car', 'bike', 'van', 'suv')),
             registration_number VARCHAR (15) NOT NULL UNIQUE,
             daily_rent_price NUMERIC (10, 2) NOT NULL CHECK (daily_rent_price >= 0),
-            availability_status BOOLEAN CHECK (availability_status IN (TRUE, FALSE)) DEFAULT TRUE,
+            availability_status VARCHAR(10) CHECK (availability_status IN ('available', 'booked')) DEFAULT 'available',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )`);
 

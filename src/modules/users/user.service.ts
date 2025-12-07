@@ -2,6 +2,7 @@ import { pool } from "../../config/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "../../config";
+import { error } from "console";
 
 const createUser = async (userData: Record<string, any>) => {
 
@@ -29,7 +30,7 @@ const loginUser = async (userData: Record<string, any>) => {
     );
 
     const user = result.rows[0];
-    console.log(user)
+    // console.log(user)
 
     if (!user) {
         throw new Error('User not found');
@@ -37,7 +38,7 @@ const loginUser = async (userData: Record<string, any>) => {
 
     // Password Validation
     const isPasswordValid = await bcrypt.compare(userData.password, user.password);
-    console.log(isPasswordValid)
+    // console.log(isPasswordValid)
     if (!isPasswordValid) {
         throw new Error('Invalid password');
     }
@@ -49,7 +50,7 @@ const loginUser = async (userData: Record<string, any>) => {
             role: user.role
         },
         config.jwt_secret || "default_secret",
-        { expiresIn: "1h" }
+        { expiresIn: "7d" }
     )
 
     return {
@@ -108,14 +109,23 @@ const updateUserById = async (userId: number, userData: Record<string, any>) => 
         WHERE id = $5;
     `, [updatedUser.name, updatedUser.email, updatedUser.phone, updatedUser.role, userId]);
 
-    return {Updatedresult,updatedUser};
+    return { Updatedresult, updatedUser };
 }
 
+// Delete user by id Service
+const deleteUserById = async (id: any) => {
+    console.log(id)
+    const result = await pool.query(`
+        DELETE FROM users WHERE id=$1 RETURNING *; 
+        `, [id])
+    return result
+}
 export const userService = {
     createUser,
     loginUser,
     getAllUsers,
     getUserById,
-    updateUserById
+    updateUserById,
+    deleteUserById
 
 };

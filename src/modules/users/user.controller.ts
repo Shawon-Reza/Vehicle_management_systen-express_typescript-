@@ -1,6 +1,7 @@
 import e, { Request, Response } from "express";
 import { userService } from "./user.service";
 import { auth } from "../../middleware/auth";
+import { error } from "console";
 
 // Create User Controller
 const createUser = async (req: Request, res: Response) => {
@@ -175,6 +176,31 @@ const updateUserById = async (req: Request, res: Response) => {
     }
 }
 
+// Delete User by ID Controller
+const deleteUserById = async (req: Request, res: Response) => {
+
+    try {
+        const result = await userService.deleteUserById(req.params.id)
+        if (result.rowCount === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Unsuccessfull! User not found or already deleted"
+            })
+
+        }
+        res.status(200).json({
+            success: true,
+            message: "Deleted User Successfully"
+        })
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "Internal Server Error",
+            error: err
+        })
+    }
+}
+
 
 
 export const userController = {
@@ -182,5 +208,6 @@ export const userController = {
     loginUser,
     getAllUsers,
     getUserById,
-    updateUserById
+    updateUserById,
+    deleteUserById
 }

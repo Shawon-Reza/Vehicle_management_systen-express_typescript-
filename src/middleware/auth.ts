@@ -8,7 +8,7 @@ export const auth = (...role: string[]) => {
 
     return (req: Request, res: Response, next: NextFunction) => {
         const token = req.headers.authorization?.split(' ')[1];
-        console.log(token)
+        // console.log(token)
         if (!token) {
             res.status(401).json({
                 success: false,
@@ -19,7 +19,7 @@ export const auth = (...role: string[]) => {
 
         try {
             const tokenData = Jwt.verify(token, config.jwt_secret ) as Record<string, any>;
-            console.log(tokenData)
+            // console.log(tokenData)
 
             if (role.length && !role.includes(tokenData.role)) {
                 return res.status(403).json({
