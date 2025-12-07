@@ -56,12 +56,16 @@ export const initDb = async () => {
         await pool.query(`
             CREATE TABLE IF NOT EXISTS bookings (
             id SERIAL PRIMARY KEY,
+
             customer_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             vehicle_id INTEGER REFERENCES vehicles(id) ON DELETE CASCADE,
+
             rent_start_date DATE NOT NULL,
             rent_end_date DATE NOT NULL CHECK (rent_end_date >= rent_start_date),
+            
             total_price NUMERIC (10, 2) NOT NULL CHECK (total_price >= 0),
-            status VARCHAR (20) CHECK (LOWER(status) IN ('active', 'cancelled', 'returned')) NOT NULL ,
+            status VARCHAR (20) CHECK (LOWER(status) IN ('active', 'cancelled', 'returned')) DeFAULT 'active',
+            
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
         )`);
