@@ -108,10 +108,50 @@ const deleteVehicleByID = async (req: Request, res: Response) => {
         })
     }
 }
+// Update vehicle by ID 
+const updateVehicleByID = async (req: Request, res: Response) => {
+    if (!req.body) {
+        return res.status(404).json({
+            success: false,
+            message: "No data found",
+        })
+    }
+    try {
+        const result = await vehicleService.updateVehicleByID(req.params.id, req.body)
+        // console.log("Receieved Controller :", req.body)
+
+        if (!result) {
+            return res.status(404).json({
+                success: false,
+                message: "No data found",
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Updated Vehicle successfully",
+            data: result
+
+        })
+    } catch (error: any) {
+        if (error.message === "Not Found") {
+            return res.status(404).json({
+                success: false,
+                message: "Vehicles Not Found!",
+                error: error
+            })
+        }
+        return res.status(500).json({
+            success: false,
+            message: "Internal serval error",
+            error: error
+        })
+    }
+}
 
 export const vehicleController = {
     createVehicle,
     getVehicleByID,
     getAllVehicles,
-    deleteVehicleByID
+    deleteVehicleByID,
+    updateVehicleByID
 }

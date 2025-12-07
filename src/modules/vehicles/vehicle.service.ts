@@ -25,7 +25,6 @@ const createVehicle = async (userData: Record<string, unknown>) => {
     const user = result.rows[0]
     return user
 }
-
 // Fetch  vehicle by id 
 const getVehicleByID = async (id: any) => {
     const result = await pool.query(`
@@ -50,10 +49,52 @@ const deleteVehicleByID = async (id: any) => {
 
     return result.rows[0]
 }
+// Update vehicles by ID
+const updateVehicleByID = async (id: any, userData: Record<string, unknown>) => {
+
+    const result = await pool.query(`
+    SELECT * FROM vehicles WHERE id=$1
+    `, [id])
+    const oldData = result.rows[0]
+    console.log("old data:", oldData)
+    if (!oldData) {
+        throw new Error("Not Found")
+    }
+    const updatedData = {
+        ...oldData,
+        ...userData
+    }
+    console.log("updatedData:", updatedData)
+
+    const result2 = await pool.query(
+        `
+    UPDATE vehicles 
+    SET vehicle_name = $1,
+        type = $2,
+        registration_number = $3,
+        daily_rent_price = $4,
+        availability_status = $5
+    WHERE id = $6
+    RETURNING *
+  `,
+        [
+            updatedData.vehicle_name,
+            updatedData.type,
+            updatedData.registration_number,
+            updatedData.daily_rent_price,
+            updatedData.availability_status,
+            updatedData.id // the id of the vehicle to update
+        ]
+    );
+    console.log("result1:", result)
+    console.log("result2:", result2)
+    return result2.rows[0]
+}
 
 export const vehicleService = {
     createVehicle,
     getVehicleByID,
     getAllVehicles,
-    deleteVehicleByID
+    deleteVehicleByID,
+    updateVehicleByID
 }

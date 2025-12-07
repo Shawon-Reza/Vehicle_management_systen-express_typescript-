@@ -4,7 +4,7 @@ import { config } from "../config";
 
 
 export const auth = (...role: string[]) => {
-    console.log(role)
+    // console.log(role)
 
     return (req: Request, res: Response, next: NextFunction) => {
         const token = req.headers.authorization?.split(' ')[1];
