@@ -20,7 +20,7 @@ export const initDb = async () => {
             name Varchar (20) NOT NULL,
             email Varchar (50) NOT NULL UNIQUE CHECK (email = LOWER(email) AND email ~* '^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$'),
 
-            phone VARCHAR (15) NOT NULL UNIQUE,
+            phone VARCHAR (15) NOT NULL ,
             password VARCHAR (100) NOT NULL CHECK (LENGTH(password) >= 6),
             role VARCHAR (20) CHECK (LOWER(role) IN ('admin', 'customer')) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -74,6 +74,6 @@ export const initDb = async () => {
     } catch (err) {
         console.error('Error initializing Booking table on database', err);
     }
-
-
 }
+
+
