@@ -1,10 +1,11 @@
 import express from 'express';
 import { config } from './config';
 import { initDb } from './config/db';
-import userRoute from './modules/users/user.route';
+// import userRoute from './modules/users/user.route';
 import { vehicleRoute } from './modules/vehicles/vehicle.route';
 import { bookRoute } from './modules/bookings/book.route';
 import { authRoute } from './modules/auth/auth.route';
+import { userRoute } from './modules/users/user.route';
 
 const app = express();
 const PORT = config.port;
