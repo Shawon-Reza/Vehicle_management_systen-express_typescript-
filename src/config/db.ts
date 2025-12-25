@@ -4,10 +4,7 @@ import { config } from './index';
 
 export const pool = new Pool({
     connectionString: config.PG_connnection_string,
-    ssl: {
-        rejectUnauthorized: false
-    }
-
+    
 });
 
 export const initDb = async () => {
